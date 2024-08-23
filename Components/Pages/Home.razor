@@ -1,0 +1,51 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Tasks</PageTitle>
+
+<h1>Tasks</h1>
+
+<ul>
+    @foreach (var task in tasks)
+    {
+        <li>@task</li>
+    }
+</ul>
+
+@{
+    // When the form is submitted we add the task.
+}
+<form class="row" @onsubmit="AddTask">
+  <div class="col-10">
+    @{  
+        // We use the required attribute to make sure the user enters a task (HTML5 front-end validation upon form submit)
+        // We use the autofocus attribute to focus the input field when the page loads
+    } 
+    <input type="text" class="form-control" @bind="newTaskName" placeholder="New task" required autofocus>
+  </div>
+  <div class="col-2">
+    @{
+        // Note there is no binding on the button, because we use the submit handler on the form
+    }
+    <button type="submit" class="btn btn-primary mb-2">Add task</button>
+  </div>
+</form>
+
+
+
+
+@code {
+    private List<string> tasks = new List<string>();
+    private string? newTaskName;
+    private void AddTask()
+    {
+        // We add a new task to the list of tasks if it's not empty
+        // We have front-end validation in place, but we check again in back-end code (you never know if browsers respect our front-end validation)
+        if(!string.IsNullOrWhiteSpace(newTaskName)) {
+            tasks.Add(newTaskName);
+
+            // We clear the input field, so the user can add a new task immediately
+            newTaskName = string.Empty;
+        }
+    }
+}
